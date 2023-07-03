@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { SignInDto } from '../dtos/sign-in-dto';
-import { AuthGuard } from '../auth-guard/auth.guard';
-import { Public } from '../auth-guard/public.decorator';
+import { AuthGuard } from '../../../common/guard/auth.guard';
+import { Public } from 'src/common/decorator/public.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -19,7 +19,7 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: Record<string, string>) {
+  signIn(@Body() signInDto: SignInDto) {
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
 

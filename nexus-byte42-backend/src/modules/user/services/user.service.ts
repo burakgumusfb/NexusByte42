@@ -11,6 +11,6 @@ export class UserService {
   ) {}
 
   async findOne(email: string, password: string): Promise<User> {
-        return this.userModel.findOne({ email: email, password: password }).exec();
-    }
+        return this.userModel.findOne({ email: email, password: password }).lean();
+   }
 }
