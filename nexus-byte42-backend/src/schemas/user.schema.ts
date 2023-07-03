@@ -6,6 +6,7 @@ export const UserSchema = new mongoose.Schema({
 });
 
 export interface User {
+  _id: mongoose.ObjectId;
   email: string;
   password: string;
-} 
+}
