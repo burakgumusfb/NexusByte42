@@ -25,7 +25,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private jwtService: JwtService,
     private readonly redis: RedisProvider,
-  ) { }
+  ) {}
 
   @WebSocketServer()
   server: Server;
