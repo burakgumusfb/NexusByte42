@@ -1,5 +1,6 @@
 import {
   MessageBody,
+  OnGatewayConnection,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -14,9 +15,16 @@ import { Server } from 'socket.io';
     origin: '*',
   },
 })
-export class EventsGateway {
+export class EventsGateway implements OnGatewayConnection {
+
   @WebSocketServer()
   server: Server;
+
+  handleConnection(client: any, ...args: any[]) {
+    console.log('Yeni bir istemci bağlandı.' + client);
+    //client.emit('welcome', 'Hoş geldiniz!');
+    this.server.emit('message', 'test');
+  }
 
   @SubscribeMessage('events')
   findAll(@MessageBody() data: any): Observable<WsResponse<number>> {

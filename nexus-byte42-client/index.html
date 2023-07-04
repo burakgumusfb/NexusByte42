@@ -1,27 +1,62 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
-    <script>
-      const socket = io('http://localhost:3000');
-      socket.on('connect', function() {
-        console.log('Connected');
+<head>
+  <title>NexusByte42</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="container">
+    <div id="user-list">
+      <h2>Kullanıcılar</h2>
+      <ul id="user-list-items"></ul>
+    </div>
+    <div id="chat-container">
+      <h1>Chat</h1>
+      <div id="chat-messages"></div>
+      <input id="message-input" type="text" placeholder="Mesajınızı girin">
+      <button id="send-button">Gönder</button>
+    </div>
+  </div>
 
-        socket.emit('events', { test: 'test' });
-        socket.emit('identity', 0, response =>
-          console.log('Identity:', response),
-        );
-      });
-      socket.on('events', function(data) {
-        console.log('event', data);
-      });
-      socket.on('exception', function(data) {
-        console.log('event', data);
-      });
-      socket.on('disconnect', function() {
-        console.log('Disconnected');
-      });
-    </script>
-  </head>
+  <script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
+  <script>
+    const socket = io('http://localhost:3000');
 
-  <body></body>
+    socket.on('connect', function() {
+      console.log('Bağlantı kuruldu.');
+
+      const sendButton = document.getElementById('send-button');
+      const messageInput = document.getElementById('message-input');
+      const chatMessages = document.getElementById('chat-messages');
+      const userListItems = document.getElementById('user-list-items');
+
+      sendButton.addEventListener('click', function() {
+        const message = messageInput.value;
+        socket.emit('message', message);
+        messageInput.value = '';
+      });
+
+      socket.on('message', function(data) {
+        const messageDiv = document.createElement('div');
+        messageDiv.textContent = data;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Otomatik kaydırma
+      });
+
+      socket.on('userConnected', function(username) {
+        const userListItem = document.createElement('li');
+        userListItem.textContent = username;
+        userListItems.appendChild(userListItem);
+      });
+
+      socket.on('userDisconnected', function(username) {
+        const userListItem = document.querySelector(`#user-list-items li:contains(${username})`);
+        if (userListItem) {
+          userListItem.remove();
+        }
+      });
+    });
+  </script>
+</body>
 </html>
