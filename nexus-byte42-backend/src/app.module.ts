@@ -6,7 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './modules/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { RedisModule } from '@nestjs-modules/ioredis';
-import { EventsModule } from './modules/events/events.module';
+import { SocketModule } from './modules/socket/socket.module';
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { EventsModule } from './modules/events/events.module';
     }),
     AuthModule,
     UserModule,
-    EventsModule,
+    SocketModule,
   ],
   controllers: [AppController],
   providers: [AppService],

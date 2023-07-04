@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { reduce } from 'rxjs/operators';
-import { EventsGateway } from './events.gateway';
+import { SocketGateway } from './socket.gateway';
 
-describe('EventsGateway', () => {
-  let gateway: EventsGateway;
+describe('SocketGateway', () => {
+  let gateway: SocketGateway;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [EventsGateway],
+      providers: [SocketGateway],
     }).compile();
 
-    gateway = module.get<EventsGateway>(EventsGateway);
+    gateway = module.get<SocketGateway>(SocketGateway);
   });
 
   it('should be defined', () => {
@@ -18,11 +18,11 @@ describe('EventsGateway', () => {
   });
 
   describe('findAll', () => {
-    it('should return 3 numbers', done => {
+    it('should return 3 numbers', (done) => {
       gateway
         .findAll({})
         .pipe(reduce((acc, item) => [...acc, item], []))
-        .subscribe(results => {
+        .subscribe((results) => {
           expect(results.length).toBe(3);
           results.forEach((result, index) =>
             expect(result.data).toBe(index + 1),

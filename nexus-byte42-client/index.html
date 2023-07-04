@@ -1,27 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>NexusByte42</title>
+  <title>Socket.IO Chat Örneği</title>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="style.css">
+  <link href="styles/tailwind.min.css" rel="stylesheet">
+  <link href="styles/sweetalert2.min.css" rel="stylesheet">
 </head>
 <body>
-  <div id="container">
-    <div id="user-list">
-      <h2>Kullanıcılar</h2>
+  <div class="flex h-screen">
+    <div class="w-1/4 bg-gray-200 p-4">
+      <h2 class="text-xl mb-4">Kullanıcılar</h2>
       <ul id="user-list-items"></ul>
     </div>
-    <div id="chat-container">
-      <h1>Chat</h1>
-      <div id="chat-messages"></div>
-      <input id="message-input" type="text" placeholder="Mesajınızı girin">
-      <button id="send-button">Gönder</button>
+    <div class="flex-1 flex flex-col justify-end items-start bg-white p-4">
+      <h1 class="text-2xl mb-4">Chat</h1>
+      <div id="chat-messages" class="flex-grow overflow-y-auto border border-gray-300 p-4 mb-4 w-full"></div>
+      <input id="message-input" type="text" placeholder="Mesajınızı girin" class="w-full px-2 py-1 mb-4">
+      <button id="send-button" class="px-4 py-2 bg-blue-500 text-white">Gönder</button>
     </div>
   </div>
 
   <script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
   <script>
-    const socket = io('http://localhost:3000');
+    this.socketOptions = {
+    transportOptions: {
+        polling: {
+            extraHeaders: {
+                Authorization: 'Bearer ' + this.sessionStorage.getItem('access_token')
+            }
+        }
+    }
+    }
+    const socket = io('http://localhost:3000',socketOptions);
 
     socket.on('connect', function() {
       console.log('Bağlantı kuruldu.');

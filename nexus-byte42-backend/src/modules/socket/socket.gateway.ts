@@ -15,12 +15,14 @@ import { Server } from 'socket.io';
     origin: '*',
   },
 })
-export class EventsGateway implements OnGatewayConnection {
+export class SocketGateway implements OnGatewayConnection {
 
   @WebSocketServer()
   server: Server;
 
   handleConnection(client: any, ...args: any[]) {
+    const auth = client.handshake.headers.authorization;
+    console.log(auth);
     console.log('Yeni bir istemci bağlandı.' + client);
     //client.emit('welcome', 'Hoş geldiniz!');
     this.server.emit('message', 'test');
