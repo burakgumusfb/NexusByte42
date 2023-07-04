@@ -7,7 +7,7 @@ export class AuthService {
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async signIn(email: string, password: string): Promise<any> {
     const user = await this.usersService.findOne(email, password);
@@ -18,5 +18,12 @@ export class AuthService {
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
+  }
+  async signUp(email: string, password: string): Promise<any> {
+    const user = await this.usersService.findOne(email, password);
+    if (user) {
+      throw new InternalServerErrorException('This email already exist');
+    }
+    await this.usersService.insert(email, password);
   }
 }
