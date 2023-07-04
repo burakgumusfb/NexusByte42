@@ -1,17 +1,33 @@
 version: '3.9'
 services:
-  web-1:
+  client-1:
     build:
       context: ./nexus-byte42-client
       dockerfile: Dockerfile
     ports:
       - 80:80
-  web-2:
+    container_name: nexus-byte42-client-1
+  client-2:
     build:
       context: ./nexus-byte42-client
       dockerfile: Dockerfile
     ports:
       - 81:80
+    container_name: nexus-byte42-client-2
+  backend-1:
+    build:
+      context: ./nexus-byte42-backend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    container_name: nexus-byte42-backend-1
+  backend-2:
+    build:
+      context: ./nexus-byte42-backend
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3000
+    container_name: nexus-byte42-backend-2
   mongodb:
     image: mongo
     container_name: nexus-byte42-mongodb
