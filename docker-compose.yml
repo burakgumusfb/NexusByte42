@@ -1,5 +1,17 @@
 version: '3.9'
 services:
+  web-1:
+    build:
+      context: ./nexus-byte42-client
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+  web-2:
+    build:
+      context: ./nexus-byte42-client
+      dockerfile: Dockerfile
+    ports:
+      - 81:80
   mongodb:
     image: mongo
     container_name: nexus-byte42-mongodb

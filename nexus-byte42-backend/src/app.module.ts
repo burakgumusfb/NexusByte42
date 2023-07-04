@@ -7,6 +7,7 @@ import { UserModule } from './modules/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { RedisModule } from '@nestjs-modules/ioredis';
+import { EventsModule } from './modules/events/events.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { RedisModule } from '@nestjs-modules/ioredis';
     }),
     AuthModule,
     UserModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

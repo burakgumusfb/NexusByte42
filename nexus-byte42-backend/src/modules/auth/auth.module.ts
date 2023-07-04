@@ -14,7 +14,7 @@ import { RedisProvider } from 'src/providers/redis.provider';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
-    RedisProvider
+    RedisProvider,
   ],
   controllers: [AuthController],
   exports: [AuthService],
