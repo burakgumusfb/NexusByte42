@@ -1,72 +1,85 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Socket.IO Chat Örneği</title>
   <meta charset="UTF-8">
   <link href="styles/tailwind.min.css" rel="stylesheet">
   <link href="styles/sweetalert2.min.css" rel="stylesheet">
 </head>
+
 <body>
   <div class="flex h-screen">
     <div class="w-1/4 bg-gray-200 p-4">
-      <h2 class="text-xl mb-4">Kullanıcılar</h2>
+      <h2 class="text-xl mb-4">Users</h2>
       <ul id="user-list-items"></ul>
     </div>
     <div class="flex-1 flex flex-col justify-end items-start bg-white p-4">
       <h1 class="text-2xl mb-4">Chat</h1>
       <div id="chat-messages" class="flex-grow overflow-y-auto border border-gray-300 p-4 mb-4 w-full"></div>
       <input id="message-input" type="text" placeholder="Mesajınızı girin" class="w-full px-2 py-1 mb-4">
-      <button id="send-button" class="px-4 py-2 bg-blue-500 text-white">Gönder</button>
+      <button id="send-button" class="px-4 py-2 bg-blue-500 text-white">Send</button>
     </div>
   </div>
 
-  <script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
+  <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"
+    integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs"
+    crossorigin="anonymous"></script>
   <script>
-    this.socketOptions = {
-    transportOptions: {
-        polling: {
-            extraHeaders: {
-                Authorization: 'Bearer ' + this.sessionStorage.getItem('access_token')
-            }
-        }
-    }
-    }
-    const socket = io('http://localhost:3000',socketOptions);
 
-    socket.on('connect', function() {
-      console.log('Bağlantı kuruldu.');
+    const token = this.localStorage.getItem('access_token');
+    const transportOptions = {
+      polling: {}
+    };
+
+    if (token) {
+      transportOptions.polling.extraHeaders = {
+        Authorization: 'Bearer ' + token
+      };
+    }
+
+    this.socketOptions = {
+      transportOptions: transportOptions
+    };
+
+    const socket = io('http://localhost:3000', socketOptions);
+
+    socket.on('connect', function () {
 
       const sendButton = document.getElementById('send-button');
       const messageInput = document.getElementById('message-input');
       const chatMessages = document.getElementById('chat-messages');
       const userListItems = document.getElementById('user-list-items');
 
-      sendButton.addEventListener('click', function() {
+      sendButton.addEventListener('click', function () {
         const message = messageInput.value;
         socket.emit('message', message);
         messageInput.value = '';
       });
 
-      socket.on('message', function(data) {
-        const messageDiv = document.createElement('div');
-        messageDiv.textContent = data;
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight; // Otomatik kaydırma
-      });
+      // socket.on('message', function (data) {
+      //   const messageDiv = document.createElement('div');
+      //   messageDiv.textContent = "User connected->" + data;
+      //   chatMessages.appendChild(messageDiv);
+      //   chatMessages.scrollTop = chatMessages.scrollHeight; // Otomatik kaydırma
+      // });
 
-      socket.on('userConnected', function(username) {
+      socket.on('user_connected', function (data) {
         const userListItem = document.createElement('li');
-        userListItem.textContent = username;
+        userListItem.textContent = "User connected" + ":" + data.email;
+        userListItem.id = data.client_id;
         userListItems.appendChild(userListItem);
       });
 
-      socket.on('userDisconnected', function(username) {
-        const userListItem = document.querySelector(`#user-list-items li:contains(${username})`);
+      socket.on('user_disconnected', function (data) {
+        const userListItem = document.getElementById(data.client_id);
         if (userListItem) {
-          userListItem.remove();
+          userListItem.parentNode.removeChild(userListItem);
         }
       });
+      
     });
   </script>
 </body>
+
 </html>

@@ -1,6 +1,9 @@
+import { UseGuards } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import {
   MessageBody,
   OnGatewayConnection,
+  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -9,23 +12,50 @@ import {
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Server } from 'socket.io';
+import { AuthGuard } from 'src/common/guard/auth.guard';
+import { RedisProvider } from 'src/providers/redis.provider';
 
 @WebSocketGateway({
   cors: {
     origin: '*',
   },
 })
-export class SocketGateway implements OnGatewayConnection {
+@UseGuards(AuthGuard)
+export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
+  constructor(
+    private jwtService: JwtService,
+    private readonly redis: RedisProvider,
+  ) { }
 
   @WebSocketServer()
   server: Server;
 
-  handleConnection(client: any, ...args: any[]) {
+  async handleConnection(client: any, ...args: any[]) {
     const auth = client.handshake.headers.authorization;
-    console.log(auth);
-    console.log('Yeni bir istemci bağlandı.' + client);
-    //client.emit('welcome', 'Hoş geldiniz!');
-    this.server.emit('message', 'test');
+    if (auth) {
+      const token = auth.split(' ');
+      if (token && token.length > 1) {
+        const user = this.jwtService.verify(token[1]);
+        if (!user) client.disconnect();
+        this.server.emit('user_connected', {
+          client_id: client.id,
+          email: user.email,
+        });
+        this.redis.set(client.id, client.id);
+        console.log('Bağlandı->' + client.id);
+      }
+    } else {
+      client.disconnect();
+    }
+  }
+
+  async handleDisconnect(client: any) {
+    const clientid = await this.redis.get(client.id);
+    console.log(clientid);
+    this.server.emit('user_disconnected', {
+      client_id: client.id,
+    });
+    console.log('Bağlandı->' + client.client_id);
   }
 
   @SubscribeMessage('events')
