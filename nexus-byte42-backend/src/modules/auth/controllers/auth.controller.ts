@@ -11,12 +11,12 @@ import { AuthService } from '../services/auth.service';
 import { SignInDto } from '../dtos/sign-in-dto';
 import { AuthGuard } from '../../../common/guard/auth.guard';
 import { Public } from 'src/common/decorator/public.decorator';
-import { InjectRedis, Redis } from '@nestjs-modules/ioredis';
+import { RedisProvider } from 'src/providers/redis.provider';
 
 @Controller('auth')
 export class AuthController {
   constructor(
-    @InjectRedis() private readonly redis: Redis,
+    private readonly redis: RedisProvider,
     private authService: AuthService,
   ) { }
 
