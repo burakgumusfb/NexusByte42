@@ -1,12 +1,12 @@
 version: '3.9'
 services:
-  client-1:
-    build:
-      context: ./nexus-byte42-client
-      dockerfile: Dockerfile
-    ports:
-      - 80:80
-    container_name: nexus-byte42-client-1
+  # client-1:
+  #   build:
+  #     context: ./nexus-byte42-client
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 80:80
+  #   container_name: nexus-byte42-client-1
   client-2:
     build:
       context: ./nexus-byte42-client
@@ -14,13 +14,13 @@ services:
     ports:
       - 81:80
     container_name: nexus-byte42-client-2
-  backend-1:
-    build:
-      context: ./nexus-byte42-backend
-      dockerfile: Dockerfile
-    ports:
-      - 3000:3000
-    container_name: nexus-byte42-backend-1
+  # backend-1:
+  #   build:
+  #     context: ./nexus-byte42-backend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 3000:3000
+  #   container_name: nexus-byte42-backend-1
   backend-2:
     build:
       context: ./nexus-byte42-backend
@@ -28,16 +28,16 @@ services:
     ports:
       - 3001:3000
     container_name: nexus-byte42-backend-2
-  mongodb:
-    image: mongo
-    container_name: nexus-byte42-mongodb
-    ports:
-      - 27017:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: 12345678
-  redis:
-    image: redis
-    container_name: nexus-byte42-redis
-    ports:
-      - 6379:6379
+  # mongodb:
+  #   image: mongo
+  #   container_name: nexus-byte42-mongodb
+  #   ports:
+  #     - 27017:27017
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: admin
+  #     MONGO_INITDB_ROOT_PASSWORD: 12345678
+  # redis:
+  #   image: redis
+  #   container_name: nexus-byte42-redis
+  #   ports:
+  #     - 6379:6379

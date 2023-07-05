@@ -4,8 +4,6 @@ import { User } from './user.schema';
 
 @Schema()
 export class ChatRoom extends Document {
-  @Prop({ required: true })
-  name: string;
 
   @Prop([{ type: Types.ObjectId, ref: 'User' }])
   participants: User[];

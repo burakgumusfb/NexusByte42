@@ -6,7 +6,7 @@ import { InjectModel } from '@nestjs/mongoose';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel('User')
+    @InjectModel(User.name)
     private userModel: Model<User>,
   ) {}
 

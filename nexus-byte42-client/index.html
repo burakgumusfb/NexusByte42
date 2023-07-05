@@ -13,7 +13,8 @@
     <div class="w-1/4 bg-gray-200 p-4">
       <h2 class="text-xl mb-4">Kullanıcılar</h2>
       <ul id="user-list-items"></ul>
-      <button id = "logout" class="fixed bottom-4 left-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+      <button id="logoutBtn"
+        class="fixed bottom-4 left-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
         Çıkış
       </button>
     </div>
@@ -25,10 +26,13 @@
     </div>
   </div>
 
-  <script src="js/socket.io.min.js"></script>
+  <script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
   <script>
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      window.location.href = 'login.html';
+    }
 
-    const token = this.localStorage.getItem('access_token');
     const transportOptions = {
       polling: {}
     };
@@ -39,18 +43,23 @@
       };
     }
 
-    this.socketOptions = {
+    const socketOptions = {
       transportOptions: transportOptions
     };
 
     const socket = io('http://localhost:3000', socketOptions);
 
     socket.on('connect', function () {
-
       const sendButton = document.getElementById('send-button');
       const messageInput = document.getElementById('message-input');
       const chatMessages = document.getElementById('chat-messages');
       const userListItems = document.getElementById('user-list-items');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      logoutBtn.addEventListener('click', function () {
+        localStorage.removeItem('access_token');
+        window.location.href = 'login.html';
+      });
 
       sendButton.addEventListener('click', function () {
         const message = messageInput.value;
@@ -58,16 +67,21 @@
         messageInput.value = '';
       });
 
-      // socket.on('message', function (data) {
-      //   const messageDiv = document.createElement('div');
-      //   messageDiv.textContent = "User connected->" + data;
-      //   chatMessages.appendChild(messageDiv);
-      //   chatMessages.scrollTop = chatMessages.scrollHeight; // Otomatik kaydırma
-      // });
+      messageInput.addEventListener('keypress', function (event) {
+        if (event.keyCode === 13) {
+          const message = messageInput.value;
+          socket.emit('message', message);
+          messageInput.value = '';
+        }
+      });
+
+      socket.on('receive_message', function (data) {
+        console.log(data);
+      });
 
       socket.on('user_connected', function (data) {
         const userListItem = document.createElement('li');
-        userListItem.textContent = "User connected" + ":" + data.email;
+        userListItem.textContent = 'User connected: ' + data.email;
         userListItem.id = data.client_id;
         userListItems.appendChild(userListItem);
       });
@@ -78,7 +92,6 @@
           userListItem.parentNode.removeChild(userListItem);
         }
       });
-
     });
   </script>
 </body>
