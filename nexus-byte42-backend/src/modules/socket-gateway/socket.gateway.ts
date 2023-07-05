@@ -14,7 +14,9 @@ import { MessageDto } from '../chat/message/dtos/message-dto';
 import { MessageService } from '../chat/message/services/message.service';
 import { Types } from 'mongoose';
 import { ChatRoomService } from '../chat/chat-room/services/chat-room.service';
-import { ParticipantDto } from '../chat/chat-room/dtos/participant-dto';
+import { ParticipantDto } from '../chat/chat-room/dtos/participant.dto';
+import { SocketGatewayService } from './services/socket.gateway.service';
+import { OnlineUsersDto } from './dtos/online-users.dto';
 
 @WebSocketGateway({
   cors: {
@@ -27,7 +29,8 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly messageService: MessageService,
     private readonly jwtService: JwtService,
     private readonly redis: RedisProvider,
-  ) { }
+    private readonly socketGatewayService: SocketGatewayService,
+  ) {}
 
   @WebSocketServer()
   server: Server;
@@ -50,12 +53,15 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       client.disconnect();
       return;
     }
-
-    this.server.emit('user_connected', {
-      client_id: client.id,
+    const onlineUsersDto: OnlineUsersDto = {
+      connectionId: client.id,
       email: user.email,
-    });
-    this.redis.set(client.id, user.sub);
+    };
+    const onlineUsers = await this.socketGatewayService.addOnlineUser(
+      onlineUsersDto,
+    );
+    this.server.emit('user_connected', onlineUsers);
+
     console.log('handleConnection-->' + client.id);
 
     const chatRoom = await this.chatRoomService.createChatRoomIfNotExist();
@@ -68,10 +74,11 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  handleDisconnect(client: any) {
+  async handleDisconnect(client: any) {
     console.log('handleDisconnect->' + client.id);
+    await this.socketGatewayService.removeOnlineUser(client.id);
     this.server.emit('user_disconnected', {
-      client_id: client.id,
+      connectionId: client.id,
     });
   }
 

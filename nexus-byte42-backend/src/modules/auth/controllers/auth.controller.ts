@@ -8,11 +8,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
-import { SignInDto } from '../dtos/sign-in-dto';
+import { SignInDto } from '../dtos/sign-in.dto';
 import { AuthGuard } from '../../../common/guard/auth.guard';
 import { Public } from 'src/common/decorator/public.decorator';
 import { RedisProvider } from 'src/providers/redis.provider';
-import { SignUpDto } from '../dtos/sign-up-dto';
+import { SignUpDto } from '../dtos/sign-up.dto';
 
 @Controller('auth')
 export class AuthController {

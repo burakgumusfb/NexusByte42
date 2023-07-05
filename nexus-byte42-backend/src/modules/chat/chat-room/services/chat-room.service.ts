@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { ChatRoom } from 'src/schemas/chat-room.schema';
 import { User } from 'src/schemas/user.schema';
-import { ParticipantDto } from '../dtos/participant-dto';
+import { ParticipantDto } from '../dtos/participant.dto';
 
 @Injectable()
 export class ChatRoomService {

@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { reduce } from 'rxjs/operators';
 import { SocketGateway } from './socket.gateway';
 
 describe('SocketGateway', () => {

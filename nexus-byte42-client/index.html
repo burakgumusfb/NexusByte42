@@ -96,14 +96,18 @@
       });
 
       socket.on('user_connected', function (data) {
-        const userListItem = document.createElement('li');
-        userListItem.textContent = 'User connected: ' + data.email;
-        userListItem.id = data.client_id;
-        userListItems.appendChild(userListItem);
+        const userList = document.getElementById('user-list-items');
+        userList.innerHTML = '';
+        data.forEach(item => {
+          const userListItem = document.createElement('li');
+          userListItem.textContent = 'User connected: ' + item.email;
+          userListItem.id = item.connectionId;
+          userListItems.appendChild(userListItem);
+        })
       });
 
       socket.on('user_disconnected', function (data) {
-        const userListItem = document.getElementById(data.client_id);
+        const userListItem = document.getElementById(data.connectionId);
         if (userListItem) {
           userListItem.parentNode.removeChild(userListItem);
         }
