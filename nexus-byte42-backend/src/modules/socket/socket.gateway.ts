@@ -10,11 +10,11 @@ import {
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 import { RedisProvider } from 'src/providers/redis.provider';
-import { ChatRoomService } from '../chat-room/services/chat-room.service';
-import { MessageDto } from '../message/dtos/message-dto';
-import { MessageService } from '../message/services/message.service';
+import { MessageDto } from '../chat/message/dtos/message-dto';
+import { MessageService } from '../chat/message/services/message.service';
 import { Types } from 'mongoose';
-import { ParticipantDto } from '../chat-room/dtos/participant-dto';
+import { ChatRoomService } from '../chat/chat-room/services/chat-room.service';
+import { ParticipantDto } from '../chat/chat-room/dtos/participant-dto';
 
 @WebSocketGateway({
   cors: {

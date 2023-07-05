@@ -30,6 +30,12 @@
     integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs"
     crossorigin="anonymous"></script>
   <script>
+    const sendButton = document.getElementById('send-button');
+    const messageInput = document.getElementById('message-input');
+    const chatMessages = document.getElementById('chat-messages');
+    const userListItems = document.getElementById('user-list-items');
+    const logoutBtn = document.getElementById('logoutBtn');
+
     const token = localStorage.getItem('access_token');
     if (!token) {
       window.location.href = 'login.html';
@@ -52,11 +58,6 @@
     const socket = io('http://localhost:3000', socketOptions);
 
     socket.on('connect', function () {
-      const sendButton = document.getElementById('send-button');
-      const messageInput = document.getElementById('message-input');
-      const chatMessages = document.getElementById('chat-messages');
-      const userListItems = document.getElementById('user-list-items');
-      const logoutBtn = document.getElementById('logoutBtn');
 
       logoutBtn.addEventListener('click', function () {
         localStorage.removeItem('access_token');
@@ -99,6 +100,31 @@
         }
       });
     });
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://localhost:3000/chat/get-chat');
+    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        const data = JSON.parse(xhr.responseText);
+        data.forEach(message => {
+          const messageDiv = document.createElement('div');
+          messageDiv.textContent = message.content;
+          chatMessages.appendChild(messageDiv);
+        });
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      } else {
+        console.error('Chat messages could not be fetched:', xhr.status);
+      }
+    };
+
+    xhr.onerror = function () {
+      console.error('Error occurred while fetching chat messages');
+    };
+
+    xhr.send();
+
   </script>
 </body>
 

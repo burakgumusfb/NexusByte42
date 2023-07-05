@@ -7,6 +7,8 @@ import { UserModule } from './modules/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { RedisModule } from '@nestjs-modules/ioredis';
 import { SocketModule } from './modules/socket/socket.module';
+import { ChatModule } from './modules/chat/chat.module';
+
 
 @Module({
   imports: [
@@ -20,6 +22,7 @@ import { SocketModule } from './modules/socket/socket.module';
     }),
     AuthModule,
     UserModule,
+    ChatModule,
     SocketModule,
   ],
   controllers: [AppController],

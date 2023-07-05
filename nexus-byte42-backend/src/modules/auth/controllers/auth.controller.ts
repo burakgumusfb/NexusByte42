@@ -34,11 +34,4 @@ export class AuthController {
   signUp(@Body() signUpDto: SignUpDto) {
     return this.authService.signUp(signUpDto.email, signUpDto.password);
   }
-
-  @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
-  @Get('get-chat')
-  GetChat() {
-    return this.redis.get('burak');
-  }
 }

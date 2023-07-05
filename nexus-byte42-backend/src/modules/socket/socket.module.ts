@@ -3,9 +3,11 @@ import { SocketGateway } from './socket.gateway';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { RedisProvider } from 'src/providers/redis.provider';
-import { ChatRoomModule } from '../chat-room/chat-room.module';
-import { MessageModule } from '../message/message.module';
 import { APP_PIPE } from '@nestjs/core';
+import { ChatModule } from '../chat/chat.module';
+import { ChatRoom } from 'src/schemas/chat-room.schema';
+import { ChatRoomModule } from '../chat/chat-room/chat-room.module';
+import { MessageModule } from '../chat/message/message.module';
 
 @Module({
   imports: [
@@ -19,4 +21,4 @@ import { APP_PIPE } from '@nestjs/core';
   ],
   providers: [SocketGateway, RedisProvider],
 })
-export class SocketModule {}
+export class SocketModule { }
