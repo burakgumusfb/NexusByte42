@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
-import { SocketModule } from './modules/socket/socket.module';
+import { SocketGatewayModule } from './modules/socket-gateway/socket.gateway.module';
 import { ChatModule } from './modules/chat/chat.module';
 import { CustomConfigModule } from './config/custom-config.module';
 
@@ -13,7 +13,7 @@ import { CustomConfigModule } from './config/custom-config.module';
     AuthModule,
     UserModule,
     ChatModule,
-    SocketModule,
+    SocketGatewayModule,
   ],
   controllers: [AppController],
   providers: [AppService],

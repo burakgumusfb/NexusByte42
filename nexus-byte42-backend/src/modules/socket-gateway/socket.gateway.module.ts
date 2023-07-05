@@ -9,4 +9,4 @@ import { CustomConfigModule } from 'src/config/custom-config.module';
   imports: [CustomConfigModule, ChatRoomModule, MessageModule],
   providers: [SocketGateway, RedisProvider],
 })
-export class SocketModule {}
+export class SocketGatewayModule {}

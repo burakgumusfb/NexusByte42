@@ -11,9 +11,11 @@
 <body>
   <div class="flex h-screen">
     <div class="w-1/4 bg-gray-200 p-4">
-      <h2 class="text-xl mb-4">Kullanıcılar</h2>
+      <div id="user-box">Hosgeldin,</div>
+      <br>
+      <h2 class="text-xl mb-4">Aktif Kullanıcılar</h2>
       <ul id="user-list-items"></ul>
-      <button id="logoutBtn"
+      <button id="logout-button"
         class="fixed bottom-4 left-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
         Çıkış
       </button>
@@ -29,16 +31,23 @@
   <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"
     integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs"
     crossorigin="anonymous"></script>
+  <script src="js/custom.js"></script>
   <script>
     const sendButton = document.getElementById('send-button');
     const messageInput = document.getElementById('message-input');
     const chatMessages = document.getElementById('chat-messages');
     const userListItems = document.getElementById('user-list-items');
-    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutBtn = document.getElementById('logout-button');
+    const userBox = document.getElementById('user-box');
 
     const token = localStorage.getItem('access_token');
     if (!token) {
       window.location.href = 'login.html';
+    }
+
+    if (token) {
+      const claims = parseJwt(token);
+      userBox.innerText = userBox.innerText + " " + claims.email
     }
 
     const transportOptions = {
