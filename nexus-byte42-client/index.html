@@ -83,7 +83,7 @@
         const messageDiv = document.createElement('div');
         messageDiv.textContent = data;
         chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight; // Otomatik kaydırma
+        chatMessages.scrollTop = chatMessages.scrollHeight;
       });
 
       socket.on('user_connected', function (data) {

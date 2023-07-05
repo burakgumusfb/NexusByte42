@@ -2,24 +2,14 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
-import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './modules/user/user.module';
-import { ConfigModule } from '@nestjs/config';
-import { RedisModule } from '@nestjs-modules/ioredis';
 import { SocketModule } from './modules/socket/socket.module';
 import { ChatModule } from './modules/chat/chat.module';
-
+import { CustomConfigModule } from './config/custom-config.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: `.env` }),
-    MongooseModule.forRoot(process.env.MONGODB_CONNECTION),
-    RedisModule.forRoot({
-      config: {
-        host: process.env.REDIS_HOST,
-        port: process.env.REDIS_PORT,
-      },
-    }),
+    CustomConfigModule,
     AuthModule,
     UserModule,
     ChatModule,
@@ -28,4 +18,4 @@ import { ChatModule } from './modules/chat/chat.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
