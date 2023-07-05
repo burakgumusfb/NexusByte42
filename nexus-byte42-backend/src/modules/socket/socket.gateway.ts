@@ -1,33 +1,33 @@
-import { UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {
+  ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  WsResponse,
 } from '@nestjs/websockets';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Server } from 'socket.io';
-import { AuthGuard } from 'src/common/guard/auth.guard';
 import { RedisProvider } from 'src/providers/redis.provider';
 import { ChatRoomService } from '../chat-room/services/chat-room.service';
+import { MessageDto } from '../message/dtos/message-dto';
+import { MessageService } from '../message/services/message.service';
+import { Types } from 'mongoose';
+
 
 @WebSocketGateway({
   cors: {
     origin: '*',
   },
 })
-
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly chatRoomService: ChatRoomService,
+    private readonly messageService: MessageService,
     private jwtService: JwtService,
     private readonly redis: RedisProvider,
-  ) {}
+  ) { }
 
   @WebSocketServer()
   server: Server;
@@ -55,8 +55,8 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       client_id: client.id,
       email: user.email,
     });
-    this.redis.set(client.id, client.id);
-
+    this.redis.set(client.id, user.sub);
+    console.log('handleConnection-->' + client.id);
     const chatRoom = await this.chatRoomService.createChatRoomIfNotExist();
     if (chatRoom) {
       await this.chatRoomService.addParticipant(chatRoom._id, user.sub);
@@ -64,15 +64,29 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   async handleDisconnect(client: any) {
-    const clientid = await this.redis.get(client.id);
-    console.log(clientid);
+    console.log('handleDisconnect->' + client.id);
     this.server.emit('user_disconnected', {
       client_id: client.id,
     });
   }
-  // @UseGuards(AuthGuard)
+
   @SubscribeMessage('message')
-  listenForMessages(@MessageBody() data: string) {
-    this.server.sockets.emit('receive_message', data);
+  async listenForMessages(
+    @MessageBody() data: any,
+    @ConnectedSocket() client: any,
+  ) {
+    console.log(data);
+    console.log('listenForMessages->' + client.id);
+
+    const chatRoom = await this.chatRoomService.createChatRoomIfNotExist();
+    const userId = await this.redis.get(client.id);
+
+    const messageDto = new MessageDto();
+    messageDto.content = data;
+    messageDto.chatRoomId = chatRoom._id;
+    messageDto.senderId = new Types.ObjectId(userId);
+    
+    this.messageService.addMessage(messageDto);
+    this.server.sockets.emit('receive_message', messageDto.content);
   }
 }

@@ -6,7 +6,7 @@ import { ChatRoom } from './chat-room.schema';
 @Schema()
 export class Message extends Document {
   @Prop({ type: Types.ObjectId, ref: 'ChatRoom', required: true })
-  roomId: ChatRoom;
+  chatRoomId: ChatRoom;
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   senderId: User;

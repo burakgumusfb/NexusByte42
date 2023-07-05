@@ -26,7 +26,9 @@
     </div>
   </div>
 
-  <script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
+  <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"
+    integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs"
+    crossorigin="anonymous"></script>
   <script>
     const token = localStorage.getItem('access_token');
     if (!token) {
@@ -77,6 +79,10 @@
 
       socket.on('receive_message', function (data) {
         console.log(data);
+        const messageDiv = document.createElement('div');
+        messageDiv.textContent = data;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Otomatik kaydırma
       });
 
       socket.on('user_connected', function (data) {
