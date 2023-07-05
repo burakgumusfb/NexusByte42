@@ -14,7 +14,7 @@ import { ChatRoomService } from '../chat-room/services/chat-room.service';
 import { MessageDto } from '../message/dtos/message-dto';
 import { MessageService } from '../message/services/message.service';
 import { Types } from 'mongoose';
-
+import { ParticipantDto } from '../chat-room/dtos/participant-dto';
 
 @WebSocketGateway({
   cors: {
@@ -25,7 +25,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly chatRoomService: ChatRoomService,
     private readonly messageService: MessageService,
-    private jwtService: JwtService,
+    private readonly jwtService: JwtService,
     private readonly redis: RedisProvider,
   ) { }
 
@@ -57,13 +57,18 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     });
     this.redis.set(client.id, user.sub);
     console.log('handleConnection-->' + client.id);
+
     const chatRoom = await this.chatRoomService.createChatRoomIfNotExist();
     if (chatRoom) {
-      await this.chatRoomService.addParticipant(chatRoom._id, user.sub);
+      const participantDto: ParticipantDto = {
+        chatRoomId: chatRoom._id,
+        participantId: user.sub,
+      };
+      await this.chatRoomService.addParticipant(participantDto);
     }
   }
 
-  async handleDisconnect(client: any) {
+  handleDisconnect(client: any) {
     console.log('handleDisconnect->' + client.id);
     this.server.emit('user_disconnected', {
       client_id: client.id,
@@ -81,12 +86,13 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const chatRoom = await this.chatRoomService.createChatRoomIfNotExist();
     const userId = await this.redis.get(client.id);
 
-    const messageDto = new MessageDto();
-    messageDto.content = data;
-    messageDto.chatRoomId = chatRoom._id;
-    messageDto.senderId = new Types.ObjectId(userId);
-    
-    this.messageService.addMessage(messageDto);
+    const messageDto: MessageDto = {
+      content: data,
+      chatRoomId: chatRoom._id,
+      senderId: new Types.ObjectId(userId),
+    };
+
+    await this.messageService.addMessage(messageDto);
     this.server.sockets.emit('receive_message', messageDto.content);
   }
 }
