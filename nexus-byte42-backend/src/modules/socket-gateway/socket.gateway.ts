@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { JwtService } from '@nestjs/jwt';
 import {
   ConnectedSocket,
@@ -53,16 +54,15 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       client.disconnect();
       return;
     }
+
     const onlineUsersDto: OnlineUsersDto = {
       connectionId: client.id,
       email: user.email,
     };
-    const onlineUsers = await this.socketGatewayService.addOnlineUser(
-      onlineUsersDto,
-    );
+    const onlineUsers = await this.socketGatewayService.addOnlineUser(onlineUsersDto);
     this.server.emit('user_connected', onlineUsers);
 
-    console.log('handleConnection-->' + client.id);
+    console.log(`handleConnection --> ${client.id}`);
 
     const chatRoom = await this.chatRoomService.createChatRoomIfNotExist();
     if (chatRoom) {
@@ -74,9 +74,9 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  async handleDisconnect(client: any) {
-    console.log('handleDisconnect->' + client.id);
-    await this.socketGatewayService.removeOnlineUser(client.id);
+  handleDisconnect(client: any) {
+    console.log(`handleDisconnect -> ${client.id}`);
+    this.socketGatewayService.removeOnlineUser(client.id);
     this.server.emit('user_disconnected', {
       connectionId: client.id,
     });
@@ -88,7 +88,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: any,
   ) {
     console.log(data);
-    console.log('listenForMessages->' + client.id);
+    console.log(`listenForMessages -> ${client.id}`);
 
     const chatRoom = await this.chatRoomService.createChatRoomIfNotExist();
     const userId = await this.redis.get(client.id);
