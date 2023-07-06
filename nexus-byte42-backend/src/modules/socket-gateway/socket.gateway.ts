@@ -31,7 +31,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly jwtService: JwtService,
     private readonly redis: RedisProvider,
     private readonly socketGatewayService: SocketGatewayService,
-  ) {}
+  ) { }
 
   @WebSocketServer()
   server: Server;
@@ -57,6 +57,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     const onlineUsersDto: OnlineUsersDto = {
       connectionId: client.id,
+      userId: user.sub,
       email: user.email,
     };
     const onlineUsers = await this.socketGatewayService.addOnlineUser(onlineUsersDto);
@@ -91,7 +92,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log(`listenForMessages -> ${client.id}`);
 
     const chatRoom = await this.chatRoomService.createChatRoomIfNotExist();
-    const userId = await this.redis.get(client.id);
+    const userId = await this.socketGatewayService.getOnlineUserId(client.id);
 
     const messageDto: MessageDto = {
       content: data,

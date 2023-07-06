@@ -7,7 +7,7 @@ import { OnlineUsersDto } from '../dtos/online-users.dto';
 
 @Injectable()
 export class SocketGatewayService {
-  constructor(private readonly redis: RedisProvider) {}
+  constructor(private readonly redis: RedisProvider) { }
 
   async addOnlineUser(newOnlineUser: OnlineUsersDto): Promise<OnlineUsersDto[]> {
     let storedOnlineUsers = await this.getStoredOnlineUsers();
@@ -22,7 +22,7 @@ export class SocketGatewayService {
 
     storedOnlineUsers.push(newOnlineUser);
     await this.redis.set(ONLINE_USERS, JSON.stringify(storedOnlineUsers));
-
+    await this.redis.set(newOnlineUser.connectionId, newOnlineUser.userId);
     return storedOnlineUsers;
   }
 
@@ -39,6 +39,10 @@ export class SocketGatewayService {
     }
 
     return storedOnlineUsers;
+  }
+
+  async getOnlineUserId(connectionId: string): Promise<string> {
+    return (await this.redis.get(connectionId)).toString();
   }
 
   private async getStoredOnlineUsers(): Promise<OnlineUsersDto[]> {
