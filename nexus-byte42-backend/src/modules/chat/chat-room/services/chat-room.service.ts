@@ -10,7 +10,7 @@ export class ChatRoomService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     @InjectModel(ChatRoom.name) private readonly chatRoomModel: Model<ChatRoom>,
-  ) {}
+  ) { }
 
   async createChatRoomIfNotExist(): Promise<ChatRoom> {
     let chatRoom = await this.chatRoomModel.findOne().lean().exec();
@@ -26,17 +26,15 @@ export class ChatRoomService {
     );
 
     const user = await this.userModel.findById(participantDto.participantId);
-    if (!user) {
-      throw new Error('User does not exist.');
-    }
+    if (user) {
+      const participantExists = chatRoom.participants.some((p: User) =>
+        p._id.equals(participantDto.participantId),
+      );
+      if (!participantExists) {
+        chatRoom.participants.push(user._id);
+      }
 
-    const participantExists = chatRoom.participants.some((p: User) =>
-      p._id.equals(participantDto.participantId),
-    );
-    if (!participantExists) {
-      chatRoom.participants.push(user._id);
+      await chatRoom.save();
     }
-
-    await chatRoom.save();
   }
 }

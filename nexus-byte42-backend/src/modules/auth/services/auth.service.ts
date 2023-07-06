@@ -1,4 +1,5 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import { HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserService } from '../../user/services/user.service';
 import { JwtService } from '@nestjs/jwt';
 
@@ -25,5 +26,6 @@ export class AuthService {
       throw new InternalServerErrorException('This email already exist');
     }
     await this.usersService.insert(email, password);
+    return HttpStatus.OK;
   }
 }

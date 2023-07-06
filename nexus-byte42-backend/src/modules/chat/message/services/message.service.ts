@@ -10,13 +10,13 @@ export class MessageService {
     @InjectModel(Message.name) private readonly messageModel: Model<Message>,
   ) {}
 
-  async addMessage(messageDto: MessageDto) {
+  addMessage(messageDto: MessageDto) {
     const { chatRoomId, senderId, content } = messageDto;
     const messageModel = new this.messageModel({
       chatRoomId,
       senderId,
       content,
     });
-    await messageModel.save();
+    messageModel.save();
   }
 }

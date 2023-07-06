@@ -100,7 +100,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       senderId: new Types.ObjectId(userId),
     };
 
-    await this.messageService.addMessage(messageDto);
+    this.messageService.addMessage(messageDto);
     this.server.sockets.emit('receive_message', messageDto.content);
   }
 }
