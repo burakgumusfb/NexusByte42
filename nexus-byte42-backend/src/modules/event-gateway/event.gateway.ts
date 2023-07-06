@@ -16,7 +16,7 @@ import { MessageService } from '../chat/message/services/message.service';
 import { Types } from 'mongoose';
 import { ChatRoomService } from '../chat/chat-room/services/chat-room.service';
 import { ParticipantDto } from '../chat/chat-room/dtos/participant.dto';
-import { SocketGatewayService } from './services/socket.gateway.service';
+import { EventGatewayService } from './services/event.gateway.service';
 import { OnlineUsersDto } from './dtos/online-users.dto';
 
 @WebSocketGateway({
@@ -24,13 +24,12 @@ import { OnlineUsersDto } from './dtos/online-users.dto';
     origin: '*',
   },
 })
-export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class EventGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly chatRoomService: ChatRoomService,
     private readonly messageService: MessageService,
     private readonly jwtService: JwtService,
-    private readonly redis: RedisProvider,
-    private readonly socketGatewayService: SocketGatewayService,
+    private readonly eventGatewayService: EventGatewayService,
   ) { }
 
   @WebSocketServer()
@@ -60,7 +59,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       userId: user.sub,
       email: user.email,
     };
-    const onlineUsers = await this.socketGatewayService.addOnlineUser(onlineUsersDto);
+    const onlineUsers = await this.eventGatewayService.addOnlineUser(onlineUsersDto);
     this.server.emit('user_connected', onlineUsers);
 
     console.log(`handleConnection --> ${client.id}`);
@@ -77,7 +76,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleDisconnect(client: any) {
     console.log(`handleDisconnect -> ${client.id}`);
-    this.socketGatewayService.removeOnlineUser(client.id);
+    this.eventGatewayService.removeOnlineUser(client.id);
     this.server.emit('user_disconnected', {
       connectionId: client.id,
     });
@@ -92,7 +91,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log(`listenForMessages -> ${client.id}`);
 
     const chatRoom = await this.chatRoomService.createChatRoomIfNotExist();
-    const userId = await this.socketGatewayService.getOnlineUserId(client.id);
+    const userId = await this.eventGatewayService.getOnlineUserId(client.id);
 
     const messageDto: MessageDto = {
       content: data,

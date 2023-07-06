@@ -6,7 +6,7 @@ import { RedisProvider } from 'src/providers/redis.provider';
 import { OnlineUsersDto } from '../dtos/online-users.dto';
 
 @Injectable()
-export class SocketGatewayService {
+export class EventGatewayService {
   constructor(private readonly redis: RedisProvider) { }
 
   async addOnlineUser(newOnlineUser: OnlineUsersDto): Promise<OnlineUsersDto[]> {
