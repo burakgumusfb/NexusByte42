@@ -11,6 +11,7 @@
 <body>
   <div class="flex h-screen">
     <div class="w-1/4 bg-gray-200 p-4">
+      <div id="server-info">Backend Sunucusu:</div>
       <div id="user-box">Hosgeldin,</div>
       <br>
       <h2 class="text-xl mb-4">Aktif Kullanıcılar</h2>
@@ -33,6 +34,7 @@
     crossorigin="anonymous"></script>
   <script src="js/custom.js"></script>
   <script>
+    getBackendServerInfo();
     const sendButton = document.getElementById('send-button');
     const messageInput = document.getElementById('message-input');
     const chatMessages = document.getElementById('chat-messages');
@@ -40,6 +42,8 @@
     const logoutBtn = document.getElementById('logout-button');
     const userBox = document.getElementById('user-box');
 
+
+    const serviceUrl = returnServiceUrl();
     const token = localStorage.getItem('access_token');
     if (!token) {
       window.location.href = 'login.html';
@@ -47,7 +51,7 @@
 
     if (token) {
       const claims = parseJwt(token);
-      userBox.innerText = userBox.innerText + " " + claims.email
+      userBox.innerText = userBox.innerText + " " + claims.email;
     }
 
     const transportOptions = {
@@ -64,7 +68,7 @@
       transportOptions: transportOptions
     };
 
-    const socket = io('http://localhost:3000', socketOptions);
+    const socket = io(serviceUrl, socketOptions);
 
     socket.on('connect', function () {
 
@@ -115,7 +119,7 @@
     });
 
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:3000/chat/get-chat');
+    xhr.open('GET', serviceUrl + '/chat/get-chat');
     xhr.setRequestHeader('Authorization', 'Bearer ' + token);
 
     xhr.onload = function () {

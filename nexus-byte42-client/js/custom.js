@@ -7,3 +7,22 @@ function parseJwt(token) {
 
     return JSON.parse(jsonPayload);
 }
+
+function returnServiceUrl() {
+    const portNumber = window.location.port;
+    const basePort = 3000;
+
+    if (portNumber >= 80 && portNumber <= 100) {
+        const servicePort = basePort + (portNumber - 80);
+        return `http://localhost:${servicePort}`;
+    }
+
+    return `http://localhost:${basePort}`
+}
+function getBackendServerInfo(){
+    const url = returnServiceUrl(); 
+    const serverInfo = document.getElementById('server-info');
+    if(url){
+        serverInfo.innerText = serverInfo.innerText + " " + url;
+      }
+}
