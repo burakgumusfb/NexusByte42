@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { HttpStatus } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from '../services/auth.service';
 import { SignInDto } from '../dtos/sign-in.dto';

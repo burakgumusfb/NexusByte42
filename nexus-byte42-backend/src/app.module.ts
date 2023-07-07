@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { EventGatewayModule } from './modules/event-gateway/event.gateway.module';
@@ -15,7 +13,7 @@ import { CustomConfigModule } from './config/custom-config.module';
     ChatModule,
     EventGatewayModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

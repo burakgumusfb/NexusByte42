@@ -21,21 +21,6 @@ import { JwtModule } from '@nestjs/jwt';
       signOptions: { expiresIn: '7d' },
     }),
   ],
-  exports: [
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '7d' },
-    }),
-    ConfigModule.forRoot({
-      envFilePath: `./environments/.env.${process.env.NODE_ENV}` || '.env',
-    }),
-    MongooseModule.forRoot(process.env.MONGODB_CONNECTION),
-    RedisModule.forRoot({
-      config: {
-        host: process.env.REDIS_HOST,
-        port: process.env.REDIS_PORT,
-      },
-    }),
-  ],
+  exports: [ConfigModule, MongooseModule, RedisModule, JwtModule],
 })
 export class CustomConfigModule {}
