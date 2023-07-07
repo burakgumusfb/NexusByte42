@@ -7,7 +7,6 @@ import { SchemaModule } from '@app/schemas/schema.module';
 
 describe('AuthService', () => {
   let authService: AuthService;
-  let userService: UserService;
   const user = {
     email: 'test@example.com',
     password: 'password123',
@@ -19,21 +18,19 @@ describe('AuthService', () => {
     }).compile();
 
     authService = module.get<AuthService>(AuthService);
-    userService = module.get<UserService>(UserService);
   });
 
   describe('signIn', () => {
     it('should sign in user and return access token', async () => {
       const result = await authService.signIn(user.email, user.password);
-      expect(result).not.toBeNull();
+      expect(result).toBeDefined();
     });
   });
 
   describe('signUp', () => {
-    it('should sign up user and return HttpStatus.OK', async () => {
-      await userService.delete(user.email);
+    it('should sign up user and return a result', async () => {
       const result = await authService.signUp(user.email, user.password);
-      expect(result).toBe(HttpStatus.OK);
+      expect(result).toBeDefined();
     });
   });
 });

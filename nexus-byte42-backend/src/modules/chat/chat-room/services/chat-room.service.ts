@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
-import { ChatRoom } from 'src/schemas/chat-room.schema';
-import { User } from 'src/schemas/user.schema';
+import { Model } from 'mongoose';
+import { ChatRoom } from '@schemas/chat-room.schema';
+import { User } from '@schemas/user.schema';
 import { ParticipantDto } from '../dtos/participant.dto';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class ChatRoomService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     @InjectModel(ChatRoom.name) private readonly chatRoomModel: Model<ChatRoom>,
-  ) { }
+  ) {}
 
   async createChatRoomIfNotExist(): Promise<ChatRoom> {
     let chatRoom = await this.chatRoomModel.findOne().lean().exec();
@@ -20,7 +20,7 @@ export class ChatRoomService {
     }
     return chatRoom;
   }
-  async addParticipant(participantDto: ParticipantDto) {
+  async addParticipant(participantDto: ParticipantDto): Promise<ChatRoom> {
     const chatRoom = await this.chatRoomModel.findById(
       participantDto.chatRoomId,
     );
@@ -33,8 +33,8 @@ export class ChatRoomService {
       if (!participantExists) {
         chatRoom.participants.push(user._id);
       }
-
       await chatRoom.save();
     }
+    return chatRoom;
   }
 }

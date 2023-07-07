@@ -18,12 +18,13 @@ describe('UserService', () => {
     userService = module.get<UserService>(UserService);
   });
 
-  describe('crud methods', () => {
+  describe('insert', () => {
     it('should return user when new user created', async () => {
       const result = await userService.insert(user.email, user.password);
       expect(result.email).toBe(user.email);
     });
-
+  });
+  describe('findone', () => {
     it('should return user when email and password are valid', async () => {
       const result = await userService.findOne(user.email, user.password);
       expect(result.email).toBe(user.email);

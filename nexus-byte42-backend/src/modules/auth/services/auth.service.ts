@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserService } from '../../user/services/user.service';
 import { JwtService } from '@nestjs/jwt';
 
@@ -8,24 +8,24 @@ export class AuthService {
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
-  ) { }
+  ) {}
 
-  async signIn(email: string, password: string): Promise<any> {
+  async signIn(email: string, password: string): Promise<{ access_token: string }> {
     const user = await this.usersService.findOne(email, password);
     if (!user) {
-      throw new InternalServerErrorException('User not found');
+      throw new NotFoundException('User not found');
     }
     const payload = { sub: user._id, email: user.email };
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+    const access_token = await this.jwtService.signAsync(payload);
+    return { access_token };
   }
-  async signUp(email: string, password: string): Promise<any> {
+
+  async signUp(email: string, password: string): Promise<{ success: boolean }> {
     const user = await this.usersService.findOne(email, password);
     if (user) {
-      throw new InternalServerErrorException('This email already exist');
+      return { success: false };
     }
     await this.usersService.insert(email, password);
-    return HttpStatus.OK;
+    return { success: true };
   }
 }
