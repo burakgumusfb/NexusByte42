@@ -13,7 +13,6 @@ import { ParticipantDto } from '../dtos/participant.dto';
 
 describe('ChatRoomService', () => {
     let chatRoomService: ChatRoomService;
-    let userModel: Model<User>;
     let chatRoomModel: Model<ChatRoom>;
     let userService: UserService;
 
@@ -25,7 +24,6 @@ describe('ChatRoomService', () => {
 
         chatRoomService = module.get<ChatRoomService>(ChatRoomService);
         userService = module.get<UserService>(UserService);
-        userModel = module.get<Model<User>>(getModelToken(User.name));
         chatRoomModel = module.get<Model<ChatRoom>>(getModelToken(ChatRoom.name));
     });
 

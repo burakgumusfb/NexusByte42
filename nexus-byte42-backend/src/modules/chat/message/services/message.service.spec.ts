@@ -17,9 +17,6 @@ describe('MessageService', () => {
   let messageService: MessageService;
   let chatRoomService: ChatRoomService;
   let userService: UserService;
-  let messageModel: Model<Message>;
-  let userModel: Model<User>;
-  let chatRoomModel: Model<ChatRoom>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -30,9 +27,6 @@ describe('MessageService', () => {
     messageService = module.get<MessageService>(MessageService);
     chatRoomService = module.get<ChatRoomService>(ChatRoomService);
     userService = module.get<UserService>(UserService);
-    messageModel = module.get<Model<Message>>(getModelToken(Message.name));
-    userModel = module.get<Model<User>>(getModelToken(User.name));
-    chatRoomModel = module.get<Model<ChatRoom>>(getModelToken(ChatRoom.name));
   });
 
   describe('addMessage', () => {
