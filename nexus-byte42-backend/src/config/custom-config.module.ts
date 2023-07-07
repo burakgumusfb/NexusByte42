@@ -6,7 +6,9 @@ import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: `.env.${process.env.NODE_ENV}` }),
+    ConfigModule.forRoot({
+      envFilePath: `.env.${process.env.NODE_ENV}` || '.env',
+    }),
     MongooseModule.forRoot(process.env.MONGODB_CONNECTION),
     RedisModule.forRoot({
       config: {
@@ -24,7 +26,9 @@ import { JwtModule } from '@nestjs/jwt';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '7d' },
     }),
-    ConfigModule.forRoot({ envFilePath: `.env.${process.env.NODE_ENV}` }),
+    ConfigModule.forRoot({
+      envFilePath: `.env.${process.env.NODE_ENV}` || '.env',
+    }),
     MongooseModule.forRoot(process.env.MONGODB_CONNECTION),
     RedisModule.forRoot({
       config: {
