@@ -9,7 +9,7 @@ import { UserService } from '@app/modules/user/services/user.service';
 
 describe('AuthController', () => {
   let authController: AuthController;
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [CustomConfigModule, SchemaModule],
       controllers: [AuthController],

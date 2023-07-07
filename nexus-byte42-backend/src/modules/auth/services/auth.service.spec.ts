@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
-import { HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserService } from '../../user/services/user.service';
 import { CustomConfigModule } from '@app/config/custom-config.module';
@@ -13,7 +12,7 @@ describe('AuthService', () => {
     email: 'test@example.com',
     password: 'password123',
   };
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [CustomConfigModule, SchemaModule],
       providers: [AuthService, UserService],

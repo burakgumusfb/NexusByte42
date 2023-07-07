@@ -16,7 +16,7 @@ describe('ChatRoomService', () => {
     let chatRoomModel: Model<ChatRoom>;
     let userService: UserService;
 
-    beforeEach(async () => {
+    beforeAll(async () => {
         const module: TestingModule = await Test.createTestingModule({
             imports: [CustomConfigModule, SchemaModule],
             providers: [AuthService, UserService, ChatRoomService],

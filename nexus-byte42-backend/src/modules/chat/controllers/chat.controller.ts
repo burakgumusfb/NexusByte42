@@ -15,12 +15,12 @@ export class ChatController {
   constructor(
     private chatService: ChatService,
     private readonly jwtService: JwtService,
-    ) {}
+  ) {}
 
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  @Get('get-chat')
-  GetChat(@Req() request: any) {
+  @Get('get-latest-chat-messages')
+  getLatestChatMessages(@Req() request: any) {
     const token = request.headers.authorization.split(' ')[1];
     const user = this.jwtService.verify(token);
     return this.chatService.getLatestChatMessages(user.sub);

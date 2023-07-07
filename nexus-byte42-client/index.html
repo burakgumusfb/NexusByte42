@@ -123,7 +123,7 @@
     });
 
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', serviceUrl + '/chat/get-chat');
+    xhr.open('GET', serviceUrl + '/chat/get-latest-chat-messages');
     xhr.setRequestHeader('Authorization', 'Bearer ' + token);
 
     xhr.onload = function () {
