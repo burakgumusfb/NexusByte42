@@ -29,4 +29,7 @@ export class UserService {
     await employee.save();
     return employee;
   }
+  async delete(email: string) {
+    await this.userModel.deleteMany({ email: email });
+  }
 }

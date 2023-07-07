@@ -5,7 +5,10 @@ import { SchemaModule } from '@app/schemas/schema.module';
 
 describe('UserService', () => {
   let userService: UserService;
-
+  const user = {
+    email: 'test@example.com',
+    password: 'password123',
+  };
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [CustomConfigModule, SchemaModule],
@@ -15,21 +18,15 @@ describe('UserService', () => {
     userService = module.get<UserService>(UserService);
   });
 
-  describe('insert', () => {
+  describe('crud methods', () => {
     it('should return user when new user created', async () => {
-      const email = 'test@example.com';
-      const password = 'password123';
-      const result = await userService.insert(email, password);
-      expect(result.email).toBe(email);
+      const result = await userService.insert(user.email, user.password);
+      expect(result.email).toBe(user.email);
     });
-  });
 
-  describe('findOne', () => {
     it('should return user when email and password are valid', async () => {
-      const email = 'test@example.com';
-      const password = 'password123';
-      const result = await userService.findOne(email, password);
-      expect(result.email).toBe(email);
+      const result = await userService.findOne(user.email, user.password);
+      expect(result.email).toBe(user.email);
     });
   });
 });
