@@ -15,6 +15,7 @@ describe('ChatRoomService', () => {
     let chatRoomService: ChatRoomService;
     let userModel: Model<User>;
     let chatRoomModel: Model<ChatRoom>;
+    let userService: UserService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -23,6 +24,7 @@ describe('ChatRoomService', () => {
         }).compile();
 
         chatRoomService = module.get<ChatRoomService>(ChatRoomService);
+        userService = module.get<UserService>(UserService);
         userModel = module.get<Model<User>>(getModelToken(User.name));
         chatRoomModel = module.get<Model<ChatRoom>>(getModelToken(ChatRoom.name));
     });
@@ -37,7 +39,7 @@ describe('ChatRoomService', () => {
     describe('addParticipant', () => {
         it('should add participant to the chat room if the user exists and is not already a participant', async () => {
             const chatRoom = await chatRoomService.createChatRoomIfNotExist();
-            const user = await userModel.findOne();
+            const user = await userService.createUserIfNotExist("test0001@gmail.com", "12345");
             const participantDto: ParticipantDto = {
                 chatRoomId: chatRoom._id,
                 participantId: user._id,

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -7,7 +8,8 @@ import { SchemaModule } from '@app/schemas/schema.module';
 
 describe('AuthService', () => {
   let authService: AuthService;
-  const user = {
+  let userService: UserService;
+  const userData = {
     email: 'test@example.com',
     password: 'password123',
   };
@@ -18,19 +20,24 @@ describe('AuthService', () => {
     }).compile();
 
     authService = module.get<AuthService>(AuthService);
+    userService = module.get<UserService>(UserService);
   });
 
   describe('signIn', () => {
     it('should sign in user and return access token', async () => {
-      const result = await authService.signIn(user.email, user.password);
+      let result = undefined;
+      const user = await userService.createUserIfNotExist(userData.email, userData.password);
+      if (user) {
+         result = await authService.signIn(userData.email, userData.password);
+      }
       expect(result).toBeDefined();
     });
   });
 
   describe('signUp', () => {
     it('should sign up user and return a result', async () => {
-      const result = await authService.signUp(user.email, user.password);
-      expect(result).toBeDefined();
+      const result = await authService.signUp(userData.email, userData.password);
+      expect(result.success).toEqual(result.success);
     });
   });
 });

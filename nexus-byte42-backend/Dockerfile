@@ -11,7 +11,7 @@ COPY package*.json ./
 
 RUN npm install
 RUN npm audit fix --force
-
+ENV NODE_ENV=production
 # Bundle app source
 COPY . .
 

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
 import { MessageService } from './message.service';
@@ -15,6 +16,7 @@ import { ChatRoomService } from '../../chat-room/services/chat-room.service';
 describe('MessageService', () => {
   let messageService: MessageService;
   let chatRoomService: ChatRoomService;
+  let userService: UserService;
   let messageModel: Model<Message>;
   let userModel: Model<User>;
   let chatRoomModel: Model<ChatRoom>;
@@ -27,6 +29,7 @@ describe('MessageService', () => {
 
     messageService = module.get<MessageService>(MessageService);
     chatRoomService = module.get<ChatRoomService>(ChatRoomService);
+    userService = module.get<UserService>(UserService);
     messageModel = module.get<Model<Message>>(getModelToken(Message.name));
     userModel = module.get<Model<User>>(getModelToken(User.name));
     chatRoomModel = module.get<Model<ChatRoom>>(getModelToken(ChatRoom.name));
@@ -35,7 +38,7 @@ describe('MessageService', () => {
   describe('addMessage', () => {
     it('should add a new message to the chat room', async () => {
       const chatRoom = await chatRoomService.createChatRoomIfNotExist();
-      const user = await userModel.findOne();
+      const user = await userService.createUserIfNotExist('test0001@gmail.com', '12345')
       const content = 'Hello, world!';
       const messageDto: MessageDto = {
         chatRoomId: chatRoom._id,

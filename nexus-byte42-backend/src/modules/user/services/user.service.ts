@@ -32,4 +32,11 @@ export class UserService {
   async delete(email: string) {
     await this.userModel.deleteMany({ email: email });
   }
+  async createUserIfNotExist(email: string, password: string): Promise<User> {
+    const user = await this.userModel.findOne({ email: email }).lean();
+    if (!user) {
+      return await this.insert(email,password);
+    }
+    return user;
+  }
 }
