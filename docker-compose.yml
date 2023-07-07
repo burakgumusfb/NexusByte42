@@ -36,6 +36,11 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: 12345678
+  redis-test:
+    image: redis
+    container_name: nexus-byte42-redis-test
+    ports:
+      - 6378:6378
   redis:
     image: redis
     container_name: nexus-byte42-redis
