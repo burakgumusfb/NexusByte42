@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { EventGateway } from './event.gateway';
+import { EventsGateway } from './events.gateway';
 import { RedisProvider } from 'src/providers/redis.provider';
 import { ChatRoomModule } from '../chat/chat-room/chat-room.module';
 import { MessageModule } from '../chat/message/message.module';
 import { CustomConfigModule } from 'src/config/custom-config.module';
-import { EventGatewayService } from './services/event.gateway.service';
+import { EventsGatewayService } from './services/events.gateway.service';
 
 @Module({
   imports: [CustomConfigModule, ChatRoomModule, MessageModule],
-  providers: [EventGateway, RedisProvider, EventGatewayService],
+  providers: [EventsGateway, RedisProvider, EventsGatewayService],
 })
 export class EventGatewayModule { }

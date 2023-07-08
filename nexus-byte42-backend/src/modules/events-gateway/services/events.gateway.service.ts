@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable prefer-const */
 import { Injectable } from '@nestjs/common';
-import { ONLINE_USERS } from 'src/common/constants/chat.constant';
-import { RedisProvider } from 'src/providers/redis.provider';
+import { ONLINE_USERS } from '@common/constants/chat.constant';
+import { RedisProvider } from '../../../providers/redis.provider';
 import { OnlineUsersDto } from '../dtos/online-users.dto';
 
 @Injectable()
-export class EventGatewayService {
+export class EventsGatewayService {
   constructor(private readonly redis: RedisProvider) { }
 
   async addOnlineUser(newOnlineUser: OnlineUsersDto): Promise<OnlineUsersDto[]> {

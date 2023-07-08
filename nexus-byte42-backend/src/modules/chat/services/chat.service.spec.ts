@@ -4,15 +4,11 @@ import { AuthService } from '@app/modules/auth/services/auth.service';
 import { MessageService } from '../message/services/message.service';
 import { ChatRoomService } from '../chat-room/services/chat-room.service';
 import { UserService } from '@app/modules/user/services/user.service';
-import { Model } from 'mongoose';
-import { Message } from '@app/schemas/message.schema';
-import { User } from '@app/schemas/user.schema';
-import { ChatRoom } from '@app/schemas/chat-room.schema';
 import { SchemaModule } from '@app/schemas/schema.module';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getModelToken } from '@nestjs/mongoose';
 import { ChatService } from './chat.service';
 import { MessageDto } from '../message/dtos/message-dto';
+import { ParticipantDto } from '../chat-room/dtos/participant.dto';
 
 describe('ChatService', () => {
     let chatService: ChatService;
@@ -35,8 +31,13 @@ describe('ChatService', () => {
     describe('getLatestChatMessages', () => {
         it('should return latest chat messages for a user', async () => {
             const chatRoom = await chatRoomService.createChatRoomIfNotExist();
-            const user = await userService.createUserIfNotExist('test0001@gmail.com', '12345');
-            const content = 'Hello, world!';
+            const user = await userService.createUserIfNotExist('test06@example.com', '12345');
+            const participantDto: ParticipantDto = {
+                chatRoomId: chatRoom._id,
+                participantId: user._id,
+            };
+            await chatRoomService.addParticipant(participantDto);
+            const content = 'Hello, world!!';
             const messageDto: MessageDto = {
                 chatRoomId: chatRoom._id,
                 senderId: user._id,

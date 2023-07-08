@@ -3,7 +3,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ChatRoomService } from './chat-room.service';
 import { Model } from 'mongoose';
 import { ChatRoom } from '@schemas/chat-room.schema';
-import { User } from '@schemas/user.schema';
 import { CustomConfigModule } from '@app/config/custom-config.module';
 import { SchemaModule } from '@app/schemas/schema.module';
 import { AuthService } from '@app/modules/auth/services/auth.service';
@@ -37,7 +36,7 @@ describe('ChatRoomService', () => {
     describe('addParticipant', () => {
         it('should add participant to the chat room if the user exists and is not already a participant', async () => {
             const chatRoom = await chatRoomService.createChatRoomIfNotExist();
-            const user = await userService.createUserIfNotExist("test0001@gmail.com", "12345");
+            const user = await userService.createUserIfNotExist("test07@example.com", "12345");
             const participantDto: ParticipantDto = {
                 chatRoomId: chatRoom._id,
                 participantId: user._id,

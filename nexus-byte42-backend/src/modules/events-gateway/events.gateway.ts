@@ -10,13 +10,12 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
-import { RedisProvider } from 'src/providers/redis.provider';
 import { MessageDto } from '../chat/message/dtos/message-dto';
 import { MessageService } from '../chat/message/services/message.service';
 import { Types } from 'mongoose';
 import { ChatRoomService } from '../chat/chat-room/services/chat-room.service';
 import { ParticipantDto } from '../chat/chat-room/dtos/participant.dto';
-import { EventGatewayService } from './services/event.gateway.service';
+import { EventsGatewayService } from './services/events.gateway.service';
 import { OnlineUsersDto } from './dtos/online-users.dto';
 
 @WebSocketGateway({
@@ -24,12 +23,12 @@ import { OnlineUsersDto } from './dtos/online-users.dto';
     origin: '*',
   },
 })
-export class EventGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly chatRoomService: ChatRoomService,
     private readonly messageService: MessageService,
     private readonly jwtService: JwtService,
-    private readonly eventGatewayService: EventGatewayService,
+    private readonly eventGatewayService: EventsGatewayService,
   ) { }
 
   @WebSocketServer()
@@ -62,8 +61,6 @@ export class EventGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const onlineUsers = await this.eventGatewayService.addOnlineUser(onlineUsersDto);
     this.server.emit('user_connected', onlineUsers);
 
-    console.log(`handleConnection --> ${client.id}`);
-
     const chatRoom = await this.chatRoomService.createChatRoomIfNotExist();
     if (chatRoom) {
       const participantDto: ParticipantDto = {
@@ -75,7 +72,6 @@ export class EventGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   handleDisconnect(client: any) {
-    console.log(`handleDisconnect -> ${client.id}`);
     this.eventGatewayService.removeOnlineUser(client.id);
     this.server.emit('user_disconnected', {
       connectionId: client.id,
@@ -87,8 +83,7 @@ export class EventGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() data: any,
     @ConnectedSocket() client: any,
   ) {
-    console.log(data);
-    console.log(`listenForMessages -> ${client.id}`);
+
 
     const chatRoom = await this.chatRoomService.createChatRoomIfNotExist();
     const userId = await this.eventGatewayService.getOnlineUserId(client.id);

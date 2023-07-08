@@ -14,7 +14,7 @@ export class MessageService {
   async addMessage(messageDto: MessageDto): Promise<Message> {
     const { chatRoomId, senderId, content } = messageDto;
     const messageModel = new this.messageModel({ chatRoomId, senderId, content });
-    messageModel.save();
+    await messageModel.save();
     return messageModel;
   }
 }

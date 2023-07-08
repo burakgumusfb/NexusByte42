@@ -94,9 +94,7 @@
           messageInput.value = '';
         }
       });
-
       socket.on('receive_message', function (data) {
-        console.log(data);
         const messageDiv = document.createElement('div');
         messageDiv.textContent = data;
         chatMessages.appendChild(messageDiv);

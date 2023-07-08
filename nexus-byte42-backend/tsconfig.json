@@ -14,7 +14,8 @@
       "@app/*": ["src/*"],
       "@modules/*": ["src/modules/*"],
       "@schemas/*": ["src/schemas/*"],
-      "@common/*": ["src/common/*"]
+      "@common/*": ["src/common/*"],
+      "@providers/*": ["src/providers/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
