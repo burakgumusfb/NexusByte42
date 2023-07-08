@@ -118,31 +118,37 @@
           userListItem.parentNode.removeChild(userListItem);
         }
       });
+      
+      setTimeout(() => {
+          getLatestChatMessages()
+      }, 250);
     });
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', serviceUrl + '/chat/get-latest-chat-messages');
-    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+    function getLatestChatMessages() {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', serviceUrl + '/chat/get-latest-chat-messages');
+      xhr.setRequestHeader('Authorization', 'Bearer ' + token);
 
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        const data = JSON.parse(xhr.responseText);
-        data.forEach(message => {
-          const messageDiv = document.createElement('div');
-          messageDiv.textContent = message.content;
-          chatMessages.appendChild(messageDiv);
-        });
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      } else {
-        console.error('Chat messages could not be fetched:', xhr.status);
-      }
-    };
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          const data = JSON.parse(xhr.responseText);
+          data.forEach(message => {
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = message.content;
+            chatMessages.appendChild(messageDiv);
+          });
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        } else {
+          console.error('Chat messages could not be fetched:', xhr.status);
+        }
+      };
 
-    xhr.onerror = function () {
-      console.error('Error occurred while fetching chat messages');
-    };
+      xhr.onerror = function () {
+        console.error('Error occurred while fetching chat messages');
+      };
 
-    xhr.send();
+      xhr.send();
+    }
 
   </script>
 </body>
