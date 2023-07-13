@@ -1,8 +1,8 @@
 # compiled output
 /dist
 /node_modules
-/nexus-byte42-backend/node_modules
-/nexus-byte42-backend/dist
+/chat-flex-backend/node_modules
+/chat-flex-backend/dist
 
 # Logs
 logs

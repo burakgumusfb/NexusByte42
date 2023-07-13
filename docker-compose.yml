@@ -2,35 +2,35 @@ version: '3.9'
 services:
   client-1:
     build:
-      context: ./nexus-byte42-client
+      context: ./chat-flex-client
       dockerfile: Dockerfile
     ports:
       - 80:80
-    container_name: nexus-byte42-client-1
+    container_name: chat-flex-client-1
   client-2:
     build:
-      context: ./nexus-byte42-client
+      context: ./chat-flex-client
       dockerfile: Dockerfile
     ports:
       - 81:80
-    container_name: nexus-byte42-client-2
+    container_name: chat-flex-client-2
   backend-1:
     build:
-      context: ./nexus-byte42-backend
+      context: ./chat-flex-backend
       dockerfile: Dockerfile
     ports:
       - 3000:3000
-    container_name: nexus-byte42-backend-1
+    container_name: chat-flex-backend-1
   backend-2:
     build:
-      context: ./nexus-byte42-backend
+      context: ./chat-flex-backend
       dockerfile: Dockerfile
     ports:
       - 3001:3000
-    container_name: nexus-byte42-backend-2
+    container_name: chat-flex-backend-2
   mongodb:
     image: mongo
-    container_name: nexus-byte42-mongodb
+    container_name: chat-flex-mongodb
     ports:
       - 27017:27017
     environment:
@@ -38,11 +38,11 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: 12345678
   redis-test:
     image: redis
-    container_name: nexus-byte42-redis-test
+    container_name: chat-flex-redis-test
     ports:
       - 6378:6378
   redis:
     image: redis
-    container_name: nexus-byte42-redis
+    container_name: chat-flex-redis
     ports:
       - 6379:6379
