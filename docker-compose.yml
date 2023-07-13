@@ -14,6 +14,13 @@ services:
     ports:
       - 81:80
     container_name: chat-flex-client-2
+  client-3:
+    build:
+      context: ./chat-flex-client
+      dockerfile: Dockerfile
+    ports:
+      - 82:80
+    container_name: chat-flex-client-3
   backend-1:
     build:
       context: ./chat-flex-backend
@@ -28,6 +35,13 @@ services:
     ports:
       - 3001:3000
     container_name: chat-flex-backend-2
+  backend-3:
+    build:
+      context: ./chat-flex-backend
+      dockerfile: Dockerfile
+    ports:
+      - 3002:3000
+    container_name: chat-flex-backend-3
   mongodb:
     image: mongo
     container_name: chat-flex-mongodb

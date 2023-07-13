@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="styles/tailwind.min.css" rel="stylesheet">
     <link href="styles/sweetalert2.min.css" rel="stylesheet">
-    <title>Nexus Byte42 Giriş</title>
+    <title>Chat Flex Login</title>
 </head>
 
 <body class="bg-gray-100">
     <div class="flex justify-center items-center h-screen">
         <div class="w-full max-w-xs">
-            <div id="server-info">Backend Sunucusu:</div>
+            <div id="server-info">Backend Server:</div>
             <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
@@ -20,26 +20,26 @@
                     </label>
                     <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="email" type="text" placeholder="Emailinizi girin">
+                        id="email" type="text" placeholder="Email">
                 </div>
                 <div class="mb-6">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
-                        Şifre
+                        Password:
                     </label>
                     <input
                         class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="password" type="password" placeholder="Şifrenizi girin">
+                        id="password" type="password" placeholder="Password">
                 </div>
                 <div class="flex items-center justify-between">
                     <button id="loginBtn"
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         type="button">
-                        Giriş Yap
+                        Login
                     </button>
                     <button id="registerBtn"
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         type="button">
-                        Kayıt Ol
+                        Register
                     </button>
                 </div>
             </form>
@@ -80,7 +80,7 @@
                     title: response.error,
                     text: response.message,
                     confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Tamam'
+                    confirmButtonText: 'OK'
                 });
             }
         };

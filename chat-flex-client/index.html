@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Nexus Byte42 Chat</title>
+  <title>Chat Flex Chat App</title>
   <meta charset="UTF-8">
   <link href="styles/tailwind.min.css" rel="stylesheet">
   <link href="styles/sweetalert2.min.css" rel="stylesheet">
@@ -11,21 +11,21 @@
 <body>
   <div class="flex h-screen">
     <div class="w-1/4 bg-gray-200 p-4">
-      <div id="server-info">Backend Sunucusu:</div>
-      <div id="user-box">Hosgeldin,</div>
+      <div id="server-info">Backend Server:</div>
+      <div id="user-box">Welcome,</div>
       <br>
-      <h2 class="text-xl mb-4">Aktif Kullanıcılar</h2>
+      <h2 class="text-xl mb-4">Active Users</h2>
       <ul id="user-list-items"></ul>
       <button id="logout-button"
         class="fixed bottom-4 left-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-        Çıkış
+        Logout
       </button>
     </div>
     <div class="flex-1 flex flex-col justify-end items-start bg-white p-4">
       <h1 class="text-2xl mb-4">Chat</h1>
       <div id="chat-messages" class="flex-grow overflow-y-auto border border-gray-300 p-4 mb-4 w-full"></div>
       <input id="message-input" type="text" placeholder="Mesajınızı girin" class="w-full px-2 py-1 mb-4">
-      <button id="send-button" class="px-4 py-2 bg-blue-500 text-white">Gönder</button>
+      <button id="send-button" class="px-4 py-2 bg-blue-500 text-white">Send</button>
     </div>
   </div>
 
